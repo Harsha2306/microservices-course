@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.Pattern;
 import lombok.RequiredArgsConstructor;
 import org.harsha.accounts.constants.AccountConstants;
+import org.harsha.accounts.dto.AccountContactInfoDto;
 import org.harsha.accounts.dto.CustomerDetailsDto;
 import org.harsha.accounts.dto.CustomerDto;
 import org.harsha.accounts.dto.ResponseDto;
@@ -27,6 +28,8 @@ public class AccountController {
   private final IAccountService iAccountService;
 
   private final Environment environment;
+
+  private final AccountContactInfoDto accountContactInfoDto;
 
   @PostMapping("/create")
   public ResponseEntity<ResponseDto> createAccount(@Valid @RequestBody CustomerDto customerDto) {
@@ -81,5 +84,10 @@ public class AccountController {
   @GetMapping("/java-version")
   public ResponseEntity<String> getJavaVersion() {
     return ResponseEntity.status(HttpStatus.OK).body(environment.getProperty("JAVA_HOME"));
+  }
+
+  @GetMapping("/contact-info")
+  public ResponseEntity<AccountContactInfoDto> getContactInfo() {
+    return ResponseEntity.status(HttpStatus.OK).body(accountContactInfoDto);
   }
 }
