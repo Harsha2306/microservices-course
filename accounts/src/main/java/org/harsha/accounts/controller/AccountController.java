@@ -8,6 +8,7 @@ import org.harsha.accounts.dto.CustomerDetailsDto;
 import org.harsha.accounts.dto.CustomerDto;
 import org.harsha.accounts.dto.ResponseDto;
 import org.harsha.accounts.service.IAccountService;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +20,8 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 @Validated
 public class AccountController {
+  @Value("${build.version}")
+  private String buildVersion;
 
   private final IAccountService iAccountService;
 
@@ -50,7 +53,8 @@ public class AccountController {
         ? ResponseEntity.status(HttpStatus.OK)
             .body(new ResponseDto(AccountConstants.STATUS_200, AccountConstants.MESSAGE_200))
         : ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-            .body(new ResponseDto(AccountConstants.STATUS_417, AccountConstants.MESSAGE_417_UPDATE));
+            .body(
+                new ResponseDto(AccountConstants.STATUS_417, AccountConstants.MESSAGE_417_UPDATE));
   }
 
   @DeleteMapping("/delete")
@@ -62,6 +66,12 @@ public class AccountController {
         ? ResponseEntity.status(HttpStatus.OK)
             .body(new ResponseDto(AccountConstants.STATUS_200, AccountConstants.MESSAGE_200))
         : ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-            .body(new ResponseDto(AccountConstants.STATUS_417, AccountConstants.MESSAGE_417_DELETE));
+            .body(
+                new ResponseDto(AccountConstants.STATUS_417, AccountConstants.MESSAGE_417_DELETE));
+  }
+
+  @GetMapping("/build-info")
+  public ResponseEntity<String> getBuildInfo() {
+    return ResponseEntity.status(HttpStatus.OK).body(buildVersion);
   }
 }
