@@ -21,7 +21,8 @@ spring:
       - "application_qa.yml"
       - "application_prod.yml"
   profiles:
-    active: "qa"
+    active:
+      - "qa"
 
 server:
   port: 8081
