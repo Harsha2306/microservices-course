@@ -9,6 +9,7 @@ import org.harsha.accounts.dto.CustomerDto;
 import org.harsha.accounts.dto.ResponseDto;
 import org.harsha.accounts.service.IAccountService;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +25,8 @@ public class AccountController {
   private String buildVersion;
 
   private final IAccountService iAccountService;
+
+  private final Environment environment;
 
   @PostMapping("/create")
   public ResponseEntity<ResponseDto> createAccount(@Valid @RequestBody CustomerDto customerDto) {
@@ -73,5 +76,10 @@ public class AccountController {
   @GetMapping("/build-info")
   public ResponseEntity<String> getBuildInfo() {
     return ResponseEntity.status(HttpStatus.OK).body(buildVersion);
+  }
+
+  @GetMapping("/java-version")
+  public ResponseEntity<String> getJavaVersion() {
+    return ResponseEntity.status(HttpStatus.OK).body(environment.getProperty("JAVA_HOME"));
   }
 }
