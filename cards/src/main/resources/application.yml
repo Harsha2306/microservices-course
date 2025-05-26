@@ -17,12 +17,9 @@ spring:
       ddl-auto: update
     show-sql: true
   config:
-    import:
-      - "application_qa.yml"
-      - "application_prod.yml"
+    import: "optional:configserver:http://localhost:8071/"
   profiles:
-    active:
-      - "qa"
+    active: "prod"
 
 build:
   version: '1.0'
