@@ -80,7 +80,7 @@ public class LoanServiceImpl implements ILoanService {
         loanRepository
             .findByMobileNumber(mobileNumber)
             .orElseThrow(() -> new ResourceNotFoundException("Loan", "mobileNumber", mobileNumber));
-    loanRepository.deleteById(loan.getLoneId());
+    loanRepository.deleteById(loan.getLoanId());
     return true;
   }
 }
