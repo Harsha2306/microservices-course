@@ -48,5 +48,11 @@ info:
     description: "Bank Loans Application"
     version: "1.0.0"
 
+logging:
+  level:
+    org:
+      harsha:
+        loans: DEBUG
+
 server:
   port: 8082

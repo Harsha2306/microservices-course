@@ -48,5 +48,11 @@ info:
     description: "Cards Application"
     version: "1.0.0"
 
+logging:
+  level:
+    org:
+      harsha:
+        cards: DEBUG
+
 server:
   port: 8083

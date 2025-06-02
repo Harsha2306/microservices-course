@@ -3,6 +3,7 @@ package org.harsha.loans.controller;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Pattern;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.harsha.loans.constants.LoanConstants;
 import org.harsha.loans.dto.LoanContactInfoDto;
 import org.harsha.loans.dto.LoanDto;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.*;
     produces = {MediaType.APPLICATION_JSON_VALUE})
 @RequiredArgsConstructor
 @Validated
+@Slf4j
 public class LoanController {
 
   private final ILoanService iLoanService;
@@ -44,8 +46,10 @@ public class LoanController {
 
   @GetMapping("/fetch")
   public ResponseEntity<LoanDto> fetchLoanDetails(
+      @RequestHeader("eazyBank-correlation-id") String correlationId,
       @RequestParam @Pattern(regexp = "(^$|\\d{10})", message = "Mobile number must be 10 digits")
           String mobileNumber) {
+    log.debug("eazyBank-correlation-id found: {} ", correlationId);
     return ResponseEntity.ok(iLoanService.fetchLoan(mobileNumber));
   }
 

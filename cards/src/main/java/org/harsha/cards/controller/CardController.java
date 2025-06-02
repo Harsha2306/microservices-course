@@ -3,6 +3,7 @@ package org.harsha.cards.controller;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Pattern;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.harsha.cards.constants.CardConstants;
 import org.harsha.cards.dto.CardContactInfoDto;
 import org.harsha.cards.dto.CardDto;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.*;
     produces = {MediaType.APPLICATION_JSON_VALUE})
 @RequiredArgsConstructor
 @Validated
+@Slf4j
 public class CardController {
 
   @Value("${build.version}")
@@ -46,9 +48,11 @@ public class CardController {
 
   @GetMapping("/fetch")
   public ResponseEntity<CardDto> fetchCardDetails(
+      @RequestHeader("eazyBank-correlation-id") String correlationId,
       @RequestParam @Pattern(regexp = "(^$|\\d{10})", message = "Mobile number must be 10 digits")
           String mobileNumber) {
     CardDto cardsDto = iCardService.fetchCard(mobileNumber);
+    log.debug("eazyBank-correlation-id found: {} ", correlationId);
     return ResponseEntity.status(HttpStatus.OK).body(cardsDto);
   }
 

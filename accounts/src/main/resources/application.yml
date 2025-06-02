@@ -48,5 +48,11 @@ info:
     description: "Accounts application"
     version: "1.0.0"
 
+logging:
+  level:
+    org:
+      harsha:
+        accounts: DEBUG
+
 server:
   port: 8081
