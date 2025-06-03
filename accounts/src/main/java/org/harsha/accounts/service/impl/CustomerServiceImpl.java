@@ -42,16 +42,18 @@ public class CustomerServiceImpl implements ICustomerService {
                     new ResourceNotFoundException(
                         "Account", "customerId", customer.getCustomerId().toString()));
 
-    ResponseEntity<LoanDto> loanDtoResponseEntity = loansFeignClient.fetchLoanDetails(mobileNumber, correlationId);
-    ResponseEntity<CardDto> cardDtoResponseEntity = cardsFeignClient.fetchCardDetails(mobileNumber, correlationId);
+    ResponseEntity<LoanDto> loanDtoResponseEntity =
+        loansFeignClient.fetchLoanDetails(mobileNumber, correlationId);
+    ResponseEntity<CardDto> cardDtoResponseEntity =
+        cardsFeignClient.fetchCardDetails(mobileNumber, correlationId);
 
     return AllDetailsDto.builder()
         .name(customer.getName())
         .email(customer.getEmail())
         .mobileNumber(customer.getMobileNumber())
         .accountsDto(AccountMapper.mapToAccountDto(account))
-        .loansDto(loanDtoResponseEntity.getBody())
-        .cardsDto(cardDtoResponseEntity.getBody())
+        .loansDto(loanDtoResponseEntity != null ? loanDtoResponseEntity.getBody() : null)
+        .cardsDto(cardDtoResponseEntity != null ? cardDtoResponseEntity.getBody() : null)
         .build();
   }
 }
