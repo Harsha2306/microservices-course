@@ -1,8 +1,10 @@
 package org.harsha.accounts.controller;
 
+import io.github.resilience4j.retry.annotation.Retry;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Pattern;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.harsha.accounts.constants.AccountConstants;
 import org.harsha.accounts.dto.AccountContactInfoDto;
 import org.harsha.accounts.dto.CustomerDetailsDto;
@@ -17,10 +19,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.concurrent.TimeoutException;
+
 @RestController
 @RequestMapping(path = "/api", produces = (MediaType.APPLICATION_JSON_VALUE))
 @RequiredArgsConstructor
 @Validated
+@Slf4j
 public class AccountController {
   @Value("${build.version}")
   private String buildVersion;
@@ -77,8 +82,15 @@ public class AccountController {
   }
 
   @GetMapping("/build-info")
-  public ResponseEntity<String> getBuildInfo() {
-    return ResponseEntity.status(HttpStatus.OK).body(buildVersion);
+  @Retry(name = "getBuildInfo", fallbackMethod = "getBuildInfoFallback")
+  public ResponseEntity<String> getBuildInfo() throws TimeoutException {
+    log.debug("getBuildInfo() method invoked");
+   return ResponseEntity.status(HttpStatus.OK).body(buildVersion);
+  }
+
+  public ResponseEntity<String> getBuildInfoFallback(Throwable throwable) {
+    log.debug("getBuildInfoFallback() method invoked");
+    return ResponseEntity.status(HttpStatus.OK).body("0.9");
   }
 
   @GetMapping("/java-version")
